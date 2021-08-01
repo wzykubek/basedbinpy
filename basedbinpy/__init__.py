@@ -1,1 +1,1 @@
-from basedbinpy.main import *
+from basedbinpy.client import Client
