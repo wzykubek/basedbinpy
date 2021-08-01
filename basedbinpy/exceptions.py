@@ -1,0 +1,2 @@
+class InvalidMimeType(Exception):
+    pass

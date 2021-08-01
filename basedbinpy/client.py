@@ -1,4 +1,5 @@
 from basedbinpy.config import allowed_media_types
+from basedbinpy.exceptions import InvalidMimeType
 from collections import namedtuple
 from typing import Optional, Any
 from mimetypes import MimeTypes
@@ -37,4 +38,4 @@ class Client:
                 response = post(f"{self.url}/upload", files={"file": (filename, file, mime_type)})
                 return response.text
         else:
-            print("Invalid mime type")
+            raise InvalidMimeType("File mime type is not accepted by server")
