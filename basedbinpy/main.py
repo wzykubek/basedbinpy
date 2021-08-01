@@ -2,6 +2,8 @@ from urllib.request import urlopen
 from urllib.parse import urlencode
 from collections import namedtuple
 from typing import Optional, Any
+from mimetypes import MimeTypes
+import requests
 import json
 
 
@@ -36,3 +38,12 @@ class Client:
         else:
             output = output.decode("utf-8")
         return self.__convert_dict_to_obj("Paste", output)
+
+    def upload_file(self, filename: str) -> object:
+        mime_type = MimeTypes().guess_type(filename)[0]
+        if mime_type in ["text/plain", "image/png", "image/jpeg"]:
+            with open(filename, "rb") as file:
+                response = requests.post(f"{self.url}/upload", files={"file": (filename, file, mime_type)})
+                return response.text
+        else:
+            print("Invalid mime type")
