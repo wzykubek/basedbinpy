@@ -1,3 +1,4 @@
+from basedbinpy.config import allowed_media_types
 from collections import namedtuple
 from typing import Optional, Any
 from mimetypes import MimeTypes
@@ -31,7 +32,7 @@ class Client:
 
     def upload_file(self, filename: str) -> object:
         mime_type = MimeTypes().guess_type(filename)[0]
-        if mime_type in ["text/plain", "image/png", "image/jpeg"]:
+        if mime_type in allowed_media_types:
             with open(filename, "rb") as file:
                 response = post(f"{self.url}/upload", files={"file": (filename, file, mime_type)})
                 return response.text
