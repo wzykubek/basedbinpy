@@ -14,11 +14,12 @@ class Client:
         return json.loads(json_bytes)
 
     def __convert_dict_to_obj(self, name: str, dict_: dict) -> object:
+        dict_ = self.__convert_json_to_dict(dict_)
         return namedtuple(name, dict_.keys())(*dict_.values())
 
     def get_paste(self, paste_id: str) -> object:
         output = get(f"{self.url}/paste/{paste_id}").text
-        return self.__convert_dict_to_obj("Paste", self.__convert_json_to_dict(output))
+        return self.__convert_dict_to_obj("Paste", output)
 
     def upload_file(self, filename: str) -> object:
         mime_type = MimeTypes().guess_type(filename)[0]
