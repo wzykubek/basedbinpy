@@ -3,9 +3,6 @@ from os import path
 
 this_directory = path.abspath(path.dirname(__file__))
 
-with open(path.join(this_directory, "requirements.txt"), "r", encoding="utf-8") as f:
-    requirements = f.read().splitlines()
-
 with open(path.join(this_directory, "README.md"), "r", encoding="utf-8") as f:
     long_description = f.read()
 
@@ -13,7 +10,7 @@ source_url = "https://github.com/samedamci/basedbinpy"
 
 setup(
     name="basedbinpy",
-    version="0.2.2",
+    version="0.2.3",
     description="Simple python library for basedbin pastebin-like service.",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -24,7 +21,7 @@ setup(
         "Source": source_url,
         "Tracker": f"{source_url}/issues",
     },
-    install_requires=requirements,
+    install_requires=["requests"],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
