@@ -10,7 +10,7 @@ source_url = "https://github.com/samedamci/basedbinpy"
 
 setup(
     name="basedbinpy",
-    version="0.2.3",
+    version="0.3",
     description="Simple python library for basedbin pastebin-like service.",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -21,7 +21,7 @@ setup(
         "Source": source_url,
         "Tracker": f"{source_url}/issues",
     },
-    install_requires=["requests"],
+    install_requires=["requests", "bson==0.5.10"],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
