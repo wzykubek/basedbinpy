@@ -1,5 +1,5 @@
 from basedbinpy.config import allowed_media_types
-from basedbinpy.exceptions import InvalidMimeType
+from basedbinpy.exceptions import InvalidMimeType, PasteNotFound
 from mimetypes import MimeTypes
 from requests import post, get
 import json
@@ -14,8 +14,11 @@ class Client:
         return json.loads(json_str)
 
     def get_paste(self, paste_id: str) -> dict:
-        output = get(f"{self.url}/paste/{paste_id}").text
-        return self.__json_to_dict(output)
+        output = get(f"{self.url}/paste/{paste_id}")
+        if output.status_code == 404:
+            raise PasteNotFound()
+        else:
+            return self.__json_to_dict(output.text)
 
     def upload_file(self, filename: str) -> dict:
         mime_type = MimeTypes().guess_type(filename)[0]
