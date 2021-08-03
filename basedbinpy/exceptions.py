@@ -4,3 +4,7 @@ class InvalidMimeType(Exception):
 
 class PasteNotFound(Exception):
     pass
+
+
+class InvalidObjectId(Exception):
+    pass

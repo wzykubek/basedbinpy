@@ -1,6 +1,7 @@
 from basedbinpy.config import allowed_media_types
-from basedbinpy.exceptions import InvalidMimeType, PasteNotFound
+from basedbinpy.exceptions import InvalidMimeType, PasteNotFound, InvalidObjectId
 from mimetypes import MimeTypes
+from bson import ObjectId
 from requests import post, get
 import json
 
@@ -13,7 +14,13 @@ class Client:
     def __json_to_dict(json_str: str) -> dict:
         return json.loads(json_str)
 
+    @staticmethod
+    def __is_ObjectId_valid(id: str) -> bool:
+        return ObjectId.is_valid(id)
+
     def get_paste(self, paste_id: str) -> dict:
+        if not self.__is_ObjectId_valid(paste_id):
+            raise InvalidObjectId("Specified paste_id parameter is not valid ObjectId")
         output = get(f"{self.url}/paste/{paste_id}")
         if output.status_code == 404:
             raise PasteNotFound()
