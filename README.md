@@ -11,7 +11,7 @@ $ python3 -m pip install basedbinpy
 ## Usage demo
 
 ```python
-from basedbin import Client
+from basedbinpy import Client
 
 client = Client(BASEDBIN_URL)  # example: "http://localhost:8080"
 
