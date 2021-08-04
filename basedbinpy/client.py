@@ -3,6 +3,7 @@ from basedbinpy.exceptions import InvalidMimeType, PasteNotFound, InvalidObjectI
 from mimetypes import MimeTypes
 from bson import ObjectId
 from requests import post, get
+from os import path
 import json
 
 
@@ -18,6 +19,10 @@ class Client:
     def __is_ObjectId_valid(id: str) -> bool:
         return ObjectId.is_valid(id)
 
+    @staticmethod
+    def __file_exists(filename: str) -> bool:
+        return path.exists(filename)
+
     def get_paste(self, paste_id: str) -> dict:
         if not self.__is_ObjectId_valid(paste_id):
             raise InvalidObjectId("Specified paste_id parameter is not valid ObjectId")
@@ -28,6 +33,8 @@ class Client:
             return self.__json_to_dict(output.text)
 
     def upload_file(self, filename: str) -> dict:
+        if not self.__file_exists(filename):
+            raise FileNotFoundError()
         mime_type = MimeTypes().guess_type(filename)[0]
         if mime_type.split("/")[0] in ALLOWED_MEDIA_TYPES:
             with open(filename, "rb") as file:
