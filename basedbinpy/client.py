@@ -1,4 +1,4 @@
-from basedbinpy.config import allowed_media_types
+from basedbinpy.config import ALLOWED_MEDIA_TYPES
 from basedbinpy.exceptions import InvalidMimeType, PasteNotFound, InvalidObjectId
 from mimetypes import MimeTypes
 from bson import ObjectId
@@ -29,7 +29,7 @@ class Client:
 
     def upload_file(self, filename: str) -> dict:
         mime_type = MimeTypes().guess_type(filename)[0]
-        if mime_type in allowed_media_types:
+        if mime_type.split("/")[0] in ALLOWED_MEDIA_TYPES:
             with open(filename, "rb") as file:
                 response = post(
                     f"{self.url}/upload", files={"file": (filename, file, mime_type)}

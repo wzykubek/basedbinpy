@@ -1,1 +1,1 @@
-allowed_media_types = ["text/plain", "image/png", "image/jpeg"]
+ALLOWED_MEDIA_TYPES = ["text", "image"]
