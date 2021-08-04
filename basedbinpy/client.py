@@ -43,4 +43,4 @@ class Client:
                 )
                 return self.__json_to_dict(response.text)
         else:
-            raise InvalidMimeType("File mime type is not accepted by server")
+            raise InvalidMimeType(f"{mime_type} mime type is not accepted by server")
