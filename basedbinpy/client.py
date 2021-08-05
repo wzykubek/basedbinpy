@@ -6,6 +6,7 @@ from requests import post, get
 from os import path
 from _io import TextIOWrapper
 from io import BytesIO
+from typing import Optional
 import json
 
 
@@ -52,9 +53,10 @@ class Client:
     def __close_file(file_: TextIOWrapper):
         file_.close()
 
-    def upload_file_obj(self, file_: TextIOWrapper) -> dict:
+    def upload_file_obj(self, file_: TextIOWrapper, mime_type: Optional[str] = None) -> dict:
         file_name = file_.name
-        mime_type = self.__get_file_mime_type(file_name)
+        if not mime_type:
+            mime_type = self.__get_file_mime_type(file_name)
         if mime_type.split("/")[0] in ALLOWED_MEDIA_TYPES:
             response = post(
                 f"{self.url}/upload", files={"file": (file_name, file_, mime_type)}
@@ -73,4 +75,4 @@ class Client:
         wrapper = TextIOWrapper(buffer, encoding="cp1252", line_buffering=True)
         wrapper.write(text)
         wrapper.seek(0, 0)
-        return self.upload_file_obj(wrapper)
+        return self.upload_file_obj(wrapper, "text/plain")
