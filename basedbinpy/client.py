@@ -4,6 +4,7 @@ from mimetypes import MimeTypes
 from bson import ObjectId
 from requests import post, get
 from os import path
+from _io import TextIOWrapper
 import json
 
 
@@ -32,15 +33,31 @@ class Client:
         else:
             return self.__json_to_dict(output.text)
 
-    def upload_file(self, filename: str) -> dict:
+    @staticmethod
+    def __get_file_mime_type(filename: str) -> str:
+        return MimeTypes().guess_type(filename)[0]
+
+    def __get_file(self, filename: str) -> TextIOWrapper:
         if not self.__file_exists(filename):
             raise FileNotFoundError()
-        mime_type = MimeTypes().guess_type(filename)[0]
+        return open(filename, "r")
+
+    @staticmethod
+    def __close_file(file_: TextIOWrapper):
+        file_.close()
+
+    def upload_file_obj(self, file_: TextIOWrapper) -> dict:
+        file_name = file_.name
+        mime_type = self.__get_file_mime_type(file_name)
         if mime_type.split("/")[0] in ALLOWED_MEDIA_TYPES:
-            with open(filename, "rb") as file:
-                response = post(
-                    f"{self.url}/upload", files={"file": (filename, file, mime_type)}
-                )
-                return self.__json_to_dict(response.text)
+            response = post(
+                f"{self.url}/upload", files={"file": (file_name, file_, mime_type)}
+            )
+            self.__close_file(file_)
+            return self.__json_to_dict(response.text)
         else:
             raise InvalidMimeType(f"{mime_type} mime type is not accepted by server")
+
+    def upload_file(self, filename: str) -> dict:
+        file_ = self.__get_file(filename)
+        return self.upload_file_obj(file_)
