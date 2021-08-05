@@ -10,7 +10,7 @@ source_url = "https://github.com/samedamci/basedbinpy"
 
 setup(
     name="basedbinpy",
-    version="0.3.1",
+    version="0.4",
     description="Simple python library for basedbin pastebin-like service.",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -35,6 +35,7 @@ setup(
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
         "Topic :: Software Development :: Libraries",
+        "Environment :: Console",
         "Topic :: Utilities",
         "Typing :: Typed",
     ],
