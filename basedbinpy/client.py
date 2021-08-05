@@ -5,7 +5,13 @@ from bson import ObjectId
 from requests import post, get
 from os import path
 from _io import TextIOWrapper
+from io import BytesIO
 import json
+
+
+class NamedBytesIO(BytesIO):
+    def __init__(self, name: str) -> None:
+        self.name = name
 
 
 class Client:
@@ -61,3 +67,10 @@ class Client:
     def upload_file(self, filename: str) -> dict:
         file_ = self.__get_file(filename)
         return self.upload_file_obj(file_)
+
+    def upload_text(self, text: str, file_name: str) -> dict:
+        buffer = NamedBytesIO(file_name)
+        wrapper = TextIOWrapper(buffer, encoding="cp1252", line_buffering=True)
+        wrapper.write(text)
+        wrapper.seek(0, 0)
+        return self.upload_file_obj(wrapper)
